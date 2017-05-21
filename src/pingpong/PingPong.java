@@ -111,7 +111,7 @@ public class PingPong implements FocusListener, KeyListener{
                                 loopCount--;
                                 break;
                             }
-                        loopCount++;
+                            loopCount++;
                     }
                     try{Thread.sleep(50);}catch(Exception ex){}
                     finally
