@@ -6,7 +6,6 @@
 package pingpong;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 

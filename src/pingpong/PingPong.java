@@ -7,16 +7,11 @@ package pingpong;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
-import javax.swing.InputMap;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author 39443
