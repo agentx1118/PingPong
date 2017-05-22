@@ -43,7 +43,7 @@ public class Paddle extends JComponent{
                             mutex.tryLock(50L,TimeUnit.MILLISECONDS);
                         } catch (InterruptedException ex) {}
                         repaint();
-                        try{Thread.sleep(25);}catch(Exception ex){}
+                        try{}catch(Exception ex){}
                         finally
                         {
                             if(mutex.isHeldByCurrentThread())
@@ -73,22 +73,22 @@ public class Paddle extends JComponent{
         }
         //System.out.println("(" + x + "," + y + ")");
         Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(new Color(PingPong.getOppR(),PingPong.getOppG(),PingPong.getOppB()));
-        //g2.setColor(new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256)));
+        g2.setColor(new Color(PingPong.getOppR(),PingPong.getOppG(),
+                PingPong.getOppB()));
         g2.fillRect(x, y, paddleWidth, paddleHeight);
         //System.out.println("Paddle " + x + " " + y);
     }
     
     public void incY()
     {
-        if(y+45 < 453)
-            y += 5;
+        if(y+45 < 438)
+            y += 10;
     }
     
     public void decY()
     {
-        if(y-15 > 0)
-            y -= 5;
+        if(y-15 > 10)
+            y -= 10;
     }
     
     public int getNewX()

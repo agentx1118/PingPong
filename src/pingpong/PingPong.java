@@ -24,25 +24,35 @@ public class PingPong implements FocusListener, KeyListener{
     private static int g;
     private static int b;
     private List<Integer> keys;
+    private List<Ball> ballList;
+    private static JFrame frameL;
+    private static JFrame frameR;
+    private int score;
     
     public PingPong()
     {
         hadFocus = false;
-        r = (int)(Math.random()*256);
-        g = (int)(Math.random()*256);
-        b = (int)(Math.random()*256);
+        r = 0;
+        g = 0;
+        b = 0;
+        score = 1;
     }
     
     public void initComponents() {
         ReentrantLock mutex = new ReentrantLock(false);
         keys = Collections.synchronizedList(new ArrayList<>());
+        ballList = Collections.synchronizedList(new ArrayList<>());
         
         double sidePick = Math.random();
         boolean side = sidePick > .5;
-                   
+        Ball ball = new Ball(side, mutex);  
+        ball.setBounds(0,0,500,500);
+        System.out.println(ball);
+        ballList.add(ball);
+        
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         System.out.println(dim);
-        JFrame frameL = new JFrame();
+        frameL = new JFrame();
         frameL.setSize(new Dimension(500,500));
         frameL.setLocation((int)(0),(int)(dim.getHeight()/2-dim.getHeight()/4));
         frameL.getContentPane().setBackground(new Color(getR(),getG(),getB()));
@@ -50,29 +60,34 @@ public class PingPong implements FocusListener, KeyListener{
         paddleL = new Paddle(false,0,0,mutex);
         paddleL.setBounds(0,0,500,500);
         frameL.add(paddleL);
-        Ball ballL = new Ball(false,500,mutex);
-        ballL.setBounds(0,0,500,500);
-        frameL.add(ballL);
+        if(!side)
+            frameL.add(ballList.get(0));
+        Background backgroundL = new Background(false,mutex);
+        backgroundL.setBounds(0,0,500,500);
+        frameL.add(backgroundL);
         frameL.addKeyListener(this);
         //frameL.addKeyListener(this);
         
         
-        JFrame frameR = new JFrame();
+        frameR = new JFrame();
         frameR.setLayout(null);
         frameR.getContentPane().setBackground(new Color(getR(),getG(),getB()));
         frameR.setSize(new Dimension(500,500));
         paddleR = new Paddle(true,500,500,mutex);
         paddleR.setBounds(0,0,500,500);
-        Ball ballR = new Ball(true,500,mutex);
-        ballR.setBounds(0,0,500,500);
-        frameR.add(ballR);
         frameR.add(paddleR);
+        if(side)
+            frameR.add(ballList.get(0));
+        Background backgroundR = new Background(true,mutex);
+        backgroundR.setBounds(0,0,500,500);
+        frameR.add(backgroundR);
         frameR.addKeyListener(this);
         //rameR.addKeyListener(this);
         System.out.println(frameR.getSize());
         
         
-        frameR.setLocation((int)(dim.getWidth()-frameR.getWidth()),(int)(dim.getHeight()/2-dim.getHeight()/4));
+        frameR.setLocation((int)(dim.getWidth()-frameR.getWidth()),
+                (int)(dim.getHeight()/2-dim.getHeight()/4));
         
         System.out.println(frameR.getMaximumSize());
         
@@ -113,7 +128,7 @@ public class PingPong implements FocusListener, KeyListener{
                         }
                         loopCount++;
                     }
-                    try{Thread.sleep(50);}catch(Exception ex){}
+                    try{Thread.sleep(25);}catch(Exception ex){}
                     finally
                     {
                         if(mutex.isHeldByCurrentThread())
@@ -126,31 +141,50 @@ public class PingPong implements FocusListener, KeyListener{
         while(true)
         {
             
-            if((ballR.getNewX()+ballR.getBallWidth()) > paddleR.getNewX() && (ballR.getNewX()+ballR.getBallWidth()) < (paddleR.getNewX()+paddleR.getPaddleWidth()) && (ballR.getNewY()+ballR.getBallHeight()) > paddleR.getNewY() && (ballR.getNewY()) < (paddleR.getNewY()+paddleR.getPaddleHeight()))
+            if((ballList.get(0).getNewX()+ballList.get(0).getBallWidth()) >
+                    paddleR.getNewX() && (ballList.get(0).getNewX()+
+                    ballList.get(0).getBallWidth()) <
+                    (paddleR.getNewX()+paddleR.getPaddleWidth()) &&
+                    (ballList.get(0).getNewY()+ball.getBallHeight()) >
+                    paddleR.getNewY() && (ballList.get(0).getNewY()) <
+                    (paddleR.getNewY()+paddleR.getPaddleHeight()) &&
+                    ballList.get(0).getSide())
             {
-                ballR.setHitPaddle(true);
+                ballList.get(0).setHitPaddle(true);
                 //System.out.println("Switch");
             }
-            if((ballL.getNewX()+ballL.getBallWidth()) > paddleL.getNewX() && (ballL.getNewX()) < (paddleL.getNewX()+paddleL.getPaddleWidth()) && (ballL.getNewY()+ballL.getBallHeight()) > paddleL.getNewY() && (ballL.getNewY()) < (paddleL.getNewY()+paddleL.getPaddleHeight()))
+            if((ballList.get(0).getNewX()+ballList.get(0).getBallWidth()) >
+                    paddleL.getNewX() && (ballList.get(0).getNewX()) <
+                    (paddleL.getNewX()+paddleL.getPaddleWidth()) &&
+                    (ballList.get(0).getNewY()+ballList.get(0).getBallHeight())
+                    > paddleL.getNewY() && (ballList.get(0).getNewY()) <
+                    (paddleL.getNewY()+paddleL.getPaddleHeight()) &&
+                    !ballList.get(0).getSide())
             {
-                ballL.setHitPaddle(true);
+                ballList.get(0).setHitPaddle(true);
                 //System.out.println("Collision");
             }
             count++;
             if(count == 100)
             {
-                r = (int)(Math.random()*256);
-                g = (int)(Math.random()*256);
-                b = (int)(Math.random()*256);
                 count = 1;
-                ballR.incSpeed();
-                ballL.incSpeed();
+                ballList.get(0).incSpeed();
             }
             frameR.getContentPane().setBackground(new Color(r,g,b));
             frameL.getContentPane().setBackground(new Color(r,g,b));
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {}
+            if(Ball.getScoreL() == score)
+            {
+                ballList.get(0).getParent().getParent().getParent().getParent()
+                        .remove(ballList.get(0));
+            }
+            else if(Ball.getScoreR() == score)
+            {
+                ballList.get(0).getParent().getParent().getParent().getParent()
+                        .remove(ballList.get(0));
+            }
         }
         
     }
@@ -189,7 +223,7 @@ public class PingPong implements FocusListener, KeyListener{
             if(!exists)
                 keys.add(e.getKeyCode());
         }
-        System.out.println(keys);
+        //System.out.println(keys);
     }
 
     @Override
@@ -229,5 +263,15 @@ public class PingPong implements FocusListener, KeyListener{
     public static int getOppB()
     {
         return(255-b);
+    }
+    
+    public static JFrame getFrameL()
+    {
+        return(frameL);
+    }
+    
+    public static JFrame getFrameR()
+    {
+        return(frameR);
     }
 }
