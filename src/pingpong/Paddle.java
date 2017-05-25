@@ -6,6 +6,7 @@
 package pingpong;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,13 +15,13 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author 39443
  */
+@SuppressWarnings("serial")
 public class Paddle extends JComponent{
 
     private int x;
     private int y;
     private int paddleWidth;
     private int paddleHeight;
-    private boolean isKeyHeld;
     private boolean side;
     private boolean first;
     
@@ -30,7 +31,6 @@ public class Paddle extends JComponent{
         y = initY;
         paddleWidth = 15;
         paddleHeight = 45;
-        isKeyHeld = false;
         side = initSide;
         first = true;
         Thread animate = new Thread(new Runnable()
@@ -52,6 +52,7 @@ public class Paddle extends JComponent{
                     }
                 }
             });
+        animate.setName(((side) ? "paddleR":"paddleL"));
         animate.start();
     }
     

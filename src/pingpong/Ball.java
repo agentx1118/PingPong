@@ -5,6 +5,7 @@
  */
 package pingpong;
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author agency
  */
+@SuppressWarnings("serial")
 public class Ball extends JComponent{
     private int x;
     private int y;
@@ -40,7 +42,7 @@ public class Ball extends JComponent{
         y = (int)(Math.random()*432)+15;
         width = 0;
         height = 0;
-        speed = 3;
+        speed = 2;
         speed2D = speed;
         velocityX = (side) ? speed:-speed;
         velocityY = (velocityY == 0) ? velocityY = ((Math.random() > .5) ?
@@ -57,18 +59,18 @@ public class Ball extends JComponent{
                     {
                         try {
                             mutex.tryLock(50L,TimeUnit.MILLISECONDS);
-                        } catch (InterruptedException ex) {
-                            
-                        }
+                        } catch (InterruptedException ex){}
                         repaint();
                         try{}catch(Exception ex){}
                         finally{
                             if(mutex.isHeldByCurrentThread())
                                 mutex.unlock();
                         }
+                        
                     }
                 }
             });
+        animate.setName("ball");
         animate.start();
     }
     
@@ -143,7 +145,7 @@ public class Ball extends JComponent{
             hitXBoundary = true;
             //System.out.println("MAKE YOUR SIDE METHODS");
         }
-        else if(x+velocityX > width-ballWidth/2-25 && !side)
+        else if(x+velocityX > width-ballWidth/2 && !side)
         {
             hitXBoundary = true;
         }
@@ -223,10 +225,6 @@ public class Ball extends JComponent{
         velocityY = (velocityY == 0) ? velocityY = ((Math.random() > .5) ?
                 -1*speed:1*speed):Math.round((int)(Math.random()*speed));
         offScreen = false;
-        JFrame frameL = PingPong.getFrameL();
-        JFrame frameR = PingPong.getFrameR();
-        JFrame temp = (JFrame)getParent().getParent().
-                getParent().getParent();
         if(oldSide != side && !side)
         {
             hitXBoundary = true;
@@ -291,7 +289,7 @@ public class Ball extends JComponent{
     
     public void incSpeed()
     {
-        speed2D += .25;
+        speed2D += .125;
         speed = (int)speed2D;
     }
     
