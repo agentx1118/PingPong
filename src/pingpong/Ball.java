@@ -54,6 +54,7 @@ public class Ball extends JComponent{
         offScreen = false;
         hitXBoundary = false;
         scoreR = 0;
+        
         scoreL = 0;
         Thread animate = new Thread(new Runnable()
             {
