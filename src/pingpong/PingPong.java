@@ -39,7 +39,7 @@ public class PingPong implements FocusListener, KeyListener{
     }
     
     public void initComponents() {
-        ReentrantLock mutex = new ReentrantLock(false);
+        ReentrantLock mutex = new ReentrantLock(true);
         keys = Collections.synchronizedList(new ArrayList<>());
         ballList = Collections.synchronizedList(new ArrayList<>());
         
@@ -137,6 +137,7 @@ public class PingPong implements FocusListener, KeyListener{
                }
             }
         });
+        main.setName("frame");
         main.start();
         while(true)
         {
@@ -185,6 +186,7 @@ public class PingPong implements FocusListener, KeyListener{
                 ballList.get(0).getParent().getParent().getParent().getParent()
                         .remove(ballList.get(0));
             }
+            System.out.println(mutex.getQueueLength() + "holds on the mutex");
         }
     }
     

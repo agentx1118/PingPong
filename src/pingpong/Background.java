@@ -8,11 +8,13 @@ import java.awt.*;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.*;
 /**
  *
  * @author Sean
  */
+@SuppressWarnings("serial")
 public class Background extends JComponent{
     private boolean side;
     private String scoreL;
@@ -45,6 +47,7 @@ public class Background extends JComponent{
                     }
                 }
             });
+        animate.setName("Background");
         animate.start();
     }
     
