@@ -35,7 +35,7 @@ public class PingPong implements FocusListener, KeyListener{
         r = 0;
         g = 0;
         b = 0;
-        score = 1;
+        score = 5;
     }
     
     public void initComponents() {
@@ -186,7 +186,6 @@ public class PingPong implements FocusListener, KeyListener{
                         .remove(ballList.get(0));
             }
         }
-        
     }
     
     public void focusLost(FocusEvent e)
@@ -210,7 +209,8 @@ public class PingPong implements FocusListener, KeyListener{
         if(e.getKeyCode() == KeyEvent.VK_UP ||
                 e.getKeyCode() == KeyEvent.VK_DOWN ||
                 e.getKeyCode() == KeyEvent.VK_W ||
-                e.getKeyCode() == KeyEvent.VK_S)
+                e.getKeyCode() == KeyEvent.VK_S ||
+                e.getKeyCode() == KeyEvent.VK_P)
         {
             boolean exists = false;
             for(int i: keys)

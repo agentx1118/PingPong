@@ -31,13 +31,19 @@ public class Ball extends JComponent{
     private double speed2D;
     private static int scoreL;
     private static int scoreR;
+    private Sound sound;
+    private ReentrantLock mutex;
+    private boolean soundPlayed;
     
-    public Ball(boolean initSide, ReentrantLock mutex)
+    public Ball(boolean initSide, ReentrantLock initMutex)
     {
+        soundPlayed = false;
+        mutex = initMutex;
+        sound = new Sound(mutex);
         side = initSide;
         x = side ? 10:460;
         //y=0;
-        y = (int)(Math.random()*432)+15;
+        y = (int)(Math.random()*430)+15;
         width = 0;
         height = 0;
         speed = 3;
@@ -134,7 +140,10 @@ public class Ball extends JComponent{
             {
                 offScreen = true;
                 scoreR++;
-                try{Thread.sleep(25);}catch(Exception ex){}
+                for(int i = 0; i < 500; i++)
+                {
+                    //System.out.println(i);
+                }
                 reset();
             }
         }
@@ -151,18 +160,31 @@ public class Ball extends JComponent{
         {
             velocityY = -velocityY;
         }
-        
         if(hitPaddle && side)
         {
             velocityX = Math.abs(speed)*-1;
             System.out.println(hitPaddle);
             hitPaddle = false;
+            if(!soundPlayed)
+            {
+                sound.start();
+                soundPlayed = true;
+            }
         }
         else if(hitPaddle)
         {
             velocityX = Math.abs(speed);
             System.out.println(hitPaddle);
             hitPaddle = false;
+            if(!soundPlayed)
+            {
+                sound.start();
+                soundPlayed = true;
+            }
+        }
+        else
+        {
+            soundPlayed = false;
         }
         
         if(!side)
@@ -176,6 +198,7 @@ public class Ball extends JComponent{
         g2.setColor(new Color(PingPong.getOppR(), PingPong.getOppG(),
                 PingPong.getOppB()));
         g2.fillOval(x,y,ballWidth,ballHeight);
+        
         x = newX;
         y = newY;
         if(hitXBoundary)
@@ -219,14 +242,11 @@ public class Ball extends JComponent{
         boolean side = sidePick > .5;
         x = side ? 10:460;
         y = (int)(Math.random()*432)+15;
+        speed2D = speed = 3;
         velocityX = (side) ? speed:-speed;
         velocityY = (velocityY == 0) ? velocityY = ((Math.random() > .5) ?
                 -1*speed:1*speed):Math.round((int)(Math.random()*speed));
         offScreen = false;
-        JFrame frameL = PingPong.getFrameL();
-        JFrame frameR = PingPong.getFrameR();
-        JFrame temp = (JFrame)getParent().getParent().
-                getParent().getParent();
         if(oldSide != side && !side)
         {
             hitXBoundary = true;

@@ -22,7 +22,7 @@ public class Background extends JComponent{
     public Background(boolean initSide, ReentrantLock mutex)
     {
         side = initSide;
-        score = 1;
+        score = 5;
         System.out.println("construct");
         createStrasua();
         Thread animate = new Thread(new Runnable()
