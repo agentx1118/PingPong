@@ -186,7 +186,7 @@ public class PingPong implements FocusListener, KeyListener{
                 ballList.get(0).getParent().getParent().getParent().getParent()
                         .remove(ballList.get(0));
             }
-            System.out.println(mutex.getQueueLength() + "holds on the mutex");
+            System.out.println(mutex.getQueueLength() + " holds on the mutex");
         }
     }
     
